@@ -126,12 +126,12 @@ But anyway… let's move on to the installation process!
    Mount partitions
 
    ```bash
-   $ mkdir /boot
-   $ mount /dev/disk/by-label/NIXOS-BOOT /boot
+   $ mkdir /mnt/boot
+   $ mount /dev/disk/by-label/NIXOS-BOOT /mnt/boot
 
    $ swapon /dev/disk/by-label/nixos-swap
 
-   $ mount /dev/disk/by-label/nixos /
+   $ mount /dev/disk/by-label/nixos /mnt
 
 6. Enable flakes
 
