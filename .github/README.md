@@ -118,8 +118,8 @@ But anyway… let's move on to the installation process!
    Format partitions
 
    ```bash
-   $ mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
-   $ mkswap -L swap /dev/nvme0n1p2
+   $ mkfs.fat -F 32 -n NIXOS-BOOT /dev/nvme0n1p1
+   $ mkswap -L nixos-swap /dev/nvme0n1p2
    $ mkfs.ext4 -L nixos /dev/nvme0n1p3
    ```
 
@@ -127,9 +127,9 @@ But anyway… let's move on to the installation process!
 
    ```bash
    $ mkdir /boot
-   $ mount /dev/disk/by-label/BOOT /boot
+   $ mount /dev/disk/by-label/NIXOS-BOOT /boot
 
-   $ swapon /dev/disk/by-label/swap
+   $ swapon /dev/disk/by-label/nixos-swap
 
    $ mount /dev/disk/by-label/nixos /
 
