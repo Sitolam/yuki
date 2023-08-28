@@ -43,7 +43,7 @@
         theme = pkgs.fetchzip {
           # https://github.com/AdisonCavani/distro-grub-themes
           url = "https://raw.githubusercontent.com/AdisonCavani/distro-grub-themes/master/themes/lenovo.tar";
-          hash = "sha256-6ZevSnSNJ/Q67DTNJj8k4pjOjWZFj0tG0ljG3gwbLuc=";
+          hash = "sha256-iginpYWcfC2MCbQ4Ecs/BIQLiCerTjioJYlCHNLVFXs=";
           stripRoot = false;
         };
         default = "0";
