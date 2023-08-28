@@ -89,13 +89,30 @@ But anyway… let's move on to the installation process!
 
 2. Boot into the installer.
 
-3. Switch to root user: `sudo -i`
+3. Connect to the internet
+  
+   ```bash
+   $ ping 8.8.8.8 # if this is successful you can skip this step
+   ```
+   ```bash
+   # Find your interface
+   $ iwconfig
 
-4. Partitioning
+   # Generate a config
+   $ wpa_passphrase "My network" | sudo tee /etc/wpa_supplicant.conf
+
+   # Connect to the internet
+   $ sudo wpa_supplicant -c /etc/wpa_supplicant.conf -B -i <your network interface>
+
+   # Check if you have internet
+   $ ping 8.8.8.8 
+   ```
+
+4. Switch to root user: `sudo -i`
+
+5. Partitioning
 
    We create a 512MB EFI boot partition (`/dev/nvme0n1p1`), a 16Gb swap partition (`/dev/nvme0n1p2`) and the rest will be a ext4 root partition (`/dev/nvme0n1p3`).
-
-   We create two logical volumes, a 24GB swap parition and the rest will be our root filesystem
 
    Format partitions
 
@@ -115,23 +132,23 @@ But anyway… let's move on to the installation process!
 
    $ mount /dev/disk/by-label/nixos /
 
-5. Enable flakes
+6. Enable flakes
 
    ```bash
    $ nix-shell -p nixFlakes
    ```
 
-6. Install nixos from flake
+7. Install nixos from flake
 
    ```bash
-   $ nixos-install --flake 'github:sitolam/yuki#lenovo'
+   $ nixos-install --flake 'github:sitolam/yuki#laptop'
    ```
 
-7. Reboot, login as root, and change the password for your user using passwd
+8. Reboot, login as root, and change the password for your user using passwd
 
-8. Log in as your normal user.
+9.  Log in as your normal user.
 
-9. Install the home manager configuration
+10. Install the home manager configuration
    ```bash
    $ home-manager switch --flake 'github:rxyhn/yuki#rxyhn@lenovo'
    ```

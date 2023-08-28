@@ -16,18 +16,13 @@
     ../shared
 
     # Select the user configuration
-    ../shared/users/rxyhn.nix
+    ../shared/users/sitolam.nix
 
     # Specific configuration
     ./hardware-configuration.nix
   ];
 
   boot = {
-    initrd = {
-      supportedFilesystems = ["btrfs"];
-      systemd.enable = true;
-    };
-
     kernelModules = ["acpi_call"];
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
     extraModulePackages = with config.boot.kernelPackages; [acpi_call];
@@ -36,20 +31,14 @@
       "i8042.dumbkbd"
       "i915.force_probe=46a6"
     ];
-
     loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-
-      grub = {
-        enable = true;
-        device = "nodev";
-        efiSupport = true;
-        useOSProber = true;
-        enableCryptodisk = true;
-        configurationLimit = 3;
+  		timeout = 3;
+  		grub = {
+  			enable = true;
+  			devices = ["nodev"];
+  			efiSupport = true;
+  			useOSProber = true;
+  			configurationLimit = 5;
         gfxmodeEfi = "1920x1080";
         theme = pkgs.fetchzip {
           # https://github.com/AdisonCavani/distro-grub-themes
@@ -57,9 +46,21 @@
           hash = "sha256-6ZevSnSNJ/Q67DTNJj8k4pjOjWZFj0tG0ljG3gwbLuc=";
           stripRoot = false;
         };
-      };
-    };
-  };
+        default = "0";
+        extraEntries = ''
+          menuentry "Reboot" {
+            reboot
+          }
+          menuentry "Poweroff" {
+            halt
+          };
+        '';
+  		};
+  		efi = {
+  			canTouchEfiVariables = true;
+  			efiSysMountPoint = "/boot";
+  		};
+ 	};
 
   environment = {
     variables = {
@@ -122,10 +123,22 @@
   };
 
   networking = {
-    hostName = "lenovo";
+  	defaultGateway = "192.168.68.1";
+  	nameservers = [ 
+  					"1.1.1.1"
+  					"1.0.0.1"
+  				  ];
+  	hostName = "nixosbox";
+  	useDHCP = lib.mkDefault true;
     networkmanager.enable = true;
-    useDHCP = false;
-  };
+  	interfaces = {
+  		wlp59s0 = {
+  			ipv4.addresses = [ {
+  				address = "192.168.68.117";
+  				prefixLength = 24;
+  			}];
+  		};
+    };
 
   services = {
     acpid.enable = true;
