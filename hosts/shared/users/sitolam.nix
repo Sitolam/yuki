@@ -6,7 +6,7 @@
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in {
   users.mutableUsers = false;
-  users.users.rxyhn = {
+  users.users.sitolam = {
     description = "Rayhan Pratama";
     initialPassword = "nixos";
     isNormalUser = true;
@@ -30,9 +30,9 @@ in {
         "libvirtd"
       ];
 
-    openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAIaeDlsQNZuf95V5QNjfV8eZncS3J0kV4EWvOlcavjh rxyhn@lenovo"];
+    openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAIaeDlsQNZuf95V5QNjfV8eZncS3J0kV4EWvOlcavjh sitolam@lenovo"];
     packages = [pkgs.home-manager];
   };
 
-  home-manager.users.rxyhn = import ../../../home/rxyhn/${config.networking.hostName};
+  home-manager.users.sitolam = import ../../../home/sitolam/${config.networking.hostName};
 }
