@@ -103,6 +103,7 @@ But anyway… let's move on to the installation process!
 
    # Connect to the internet
    $ sudo wpa_supplicant -c /etc/wpa_supplicant.conf -B -i <your network interface>
+   $ sudo systemctl restart wpa_supplicant
 
    # Check if you have internet
    $ ping 8.8.8.8 
