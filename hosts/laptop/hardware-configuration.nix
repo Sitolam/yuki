@@ -20,12 +20,12 @@
   # '';
   services.xserver.videoDrivers = [ "nvidia" ];
   services.switcherooControl.enable = true;
-  fileSystems."/" =
+  fileSystems."/mnt" =
     { device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
+  fileSystems."/mnt/boot" =
     { device = "/dev/disk/by-label/NIXOS-BOOT";
       fsType = "vfat";
     };

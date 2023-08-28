@@ -7,7 +7,7 @@
 in {
   users.mutableUsers = false;
   users.users.sitolam = {
-    description = "Rayhan Pratama";
+    description = "Otis Lammertyn";
     initialPassword = "nixos";
     isNormalUser = true;
     uid = 1000;
