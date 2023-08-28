@@ -139,7 +139,7 @@
   			}];
   		};
     };
-
+};
   services = {
     acpid.enable = true;
     btrfs.autoScrub.enable = true;
