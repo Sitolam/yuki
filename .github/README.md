@@ -20,7 +20,7 @@
 <div align="center">
 
 ```ocaml
-Rxyhn's Dotfiles
+Sitolam's Dotfiles
 ```
 
 <br>
@@ -93,66 +93,27 @@ But anyway… let's move on to the installation process!
 
 4. Partitioning
 
-   We create a 512MB EFI boot partition (`/dev/nvme0n1p1`) and the rest will be our LUKS encrypted physical volume for LVM (`/dev/nvme0n1p2`).
-
-   ```bash
-   $ gdisk /dev/nvme0n1
-   ```
-
-   - `o` (create new empty partition table)
-   - `n` (add partition, 512M, type ef00 EFI)
-   - `n` (add partition, remaining space, type 8e00 Linux LVM)
-   - `w` (write partition table and exit)
-
-   Setup the encrypted LUKS partition and open it:
-
-   ```bash
-   $ cryptsetup luksFormat /dev/nvme0n1p2
-   $ cryptsetup config /dev/nvme0n1p2 --label cryptroot
-   $ cryptsetup luksOpen /dev/nvme0n1p2 enc
-   ```
+   We create a 512MB EFI boot partition (`/dev/nvme0n1p1`), a 16Gb swap partition (`/dev/nvme0n1p2`) and the rest will be a ext4 root partition (`/dev/nvme0n1p3`).
 
    We create two logical volumes, a 24GB swap parition and the rest will be our root filesystem
-
-   ```bash
-   $ pvcreate /dev/mapper/enc
-   $ vgcreate vg /dev/mapper/enc
-   $ lvcreate -L 24G -n swap vg
-   $ lvcreate -l '100%FREE' -n root vg
-   ```
 
    Format partitions
 
    ```bash
-   $ mkfs.fat -F 32 -n boot /dev/nvme0n1p1
-   $ mkswap -L swap /dev/vg/swap
-   $ swapon /dev/vg/swap
-   $ mkfs.btrfs -L root /dev/vg/root
+   $ mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
+   $ mkswap -L swap /dev/nvme0n1p2
+   $ mkfs.ext4 -L nixos /dev/nvme0n1p3
    ```
 
    Mount partitions
 
    ```bash
-   $ mount -t btrfs /dev/vg/root /mnt
+   $ mkdir /boot
+   $ mount /dev/disk/by-label/BOOT /boot
 
-   # Create the subvolumes
-   $ btrfs subvolume create /mnt/root
-   $ btrfs subvolume create /mnt/home
-   $ btrfs subvolume create /mnt/nix
-   $ btrfs subvolume create /mnt/log
-   $ umount /mnt
+   $ swapon /dev/disk/by-label/swap
 
-   # Mount the directories
-   $ mount -o subvol=root,compress=zstd,noatime,ssd,space_cache=v2 /dev/vg/root /mnt
-   $ mkdir -p /mnt/{home,nix,var/log}
-   $ mount -o subvol=home,compress=zstd,noatime,ssd,space_cache=v2 /dev/vg/root /mnt/home
-   $ mount -o subvol=nix,compress=zstd,noatime,ssd,space_cache=v2 /dev/vg/root /mnt/nix
-   $ mount -o subvol=log,compress=zstd,noatime,ssd,space_cache=v2 /dev/vg/root /mnt/var/log
-
-   # Mount boot partition
-   $ mkdir /mnt/boot
-   $ mount /dev/nvme0n1p1 /mnt/boot
-   ```
+   $ mount /dev/disk/by-label/nixos /
 
 5. Enable flakes
 
@@ -163,7 +124,7 @@ But anyway… let's move on to the installation process!
 6. Install nixos from flake
 
    ```bash
-   $ nixos-install --flake 'github:rxyhn/yuki#lenovo'
+   $ nixos-install --flake 'github:sitolam/yuki#lenovo'
    ```
 
 7. Reboot, login as root, and change the password for your user using passwd
