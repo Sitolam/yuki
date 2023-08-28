@@ -142,7 +142,6 @@
 };
   services = {
     acpid.enable = true;
-    btrfs.autoScrub.enable = true;
     logind.lidSwitch = "suspend";
     thermald.enable = true;
     tlp = {
